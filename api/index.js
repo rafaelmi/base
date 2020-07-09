@@ -10,8 +10,6 @@ const server = require('http').Server(app)
 const io = require('socket.io')(server)
 
 const response = require('./response')
-const broadcast = require('./broadcast')
-
 
 let RedisStore = require('connect-redis')(session)
 const store = new RedisStore({ client: redis.createClient() })
@@ -27,36 +25,22 @@ app.use(session({
   })
 )
 
-function checkPermission({url, session}, res, next) {
-  const public = {
-    user: {
-      info: true,
-      logout: true,
-      login: true
-    }
-  }
-  let path = url.split('/')
-  path.shift()
-  if (path.reduce((acc, cur) => {
-      return ((typeof acc) === 'object') && acc[cur]
-    }, Object.assign({}, session.permisos, public))
-  ) next()
-  else next(403)
-}
+app.use(require('./validation'))
 
-function errorPhase(err, req, res, next) {
-  const code = (typeof(err) === 'number') ? err : 500
-  res.status(code)
-  res.json(response(code, err, err.stack))
-}
-
-app.use('/', (req, res, next) => {
-  res.json(response(200))
-  next()
+const paths = [
+  '/admin',
+  '/user'
+].forEach(path => {
+  app.use(path, require('.' + path))
 })
 
-app.use('/', broadcast({ io }))
-app.use('/', errorPhase)
+app.use(require('./broadcast')(io))
+
+app.use((req, res, next) => {
+  res.json(response(res.locals.code || 200, res.locals.data))
+})
+
+app.use(require('./error'))
 
 io.on('connection', (socket) => {})
 // io.of('/consultas').on('connection', (socket) => {})

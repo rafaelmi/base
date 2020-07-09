@@ -10,7 +10,7 @@ const codes = {
   400: {title: "Petición Invalida", details: ""},
   401: {title: "Error de Autenticación", details: "Usuario y/o password incorrecto"},
   403: {title: "Petición No Autorizada", details: "No tiene permisos para ejecutar esta acción"},
-  404: {title: "Transacción Invalida", details: "Esta compra no existe"},
+  404: {title: "Operación Invalida", details: "Comando no encontrado"},
   450: {title: "Petición Rechazada", details: "El asegurado no cuenta con suficiente cobertura"},
   451: {title: "Petición Rechazada", details: "El contrato se encuentra en mora"},
   // 450: {title: "Transacción Rechazada", details: "Fondos insuficientes"},
@@ -19,6 +19,7 @@ const codes = {
   453: {title: "Usuario Desconectado", details: "No se ha establecido sesión o esta ha sido cerrada con anterioridad"},
   454: {title: "Transacción Invalida", details: "Intente nuevamente o comuniquese con un asesor"},
   455: {title: "Acción Incorrecta", details: "La transacción no se encuentra en el estado esperado"},
+  460: {title: "Error de Base de Datos", details: "Registro duplicado"},
   500: {title: "Error Interno del Servidor", details: ""},
 }
 
